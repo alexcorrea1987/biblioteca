@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="bibliotecaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cabecera_prestamos">
+          <Key>
+            <PropertyRef Name="id_CabPrestamos" />
+          </Key>
+          <Property Name="id_CabPrestamos" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_empleado" Type="int" />
+          <Property Name="id_cliente" Type="int" />
+          <Property Name="fecha_prestamo" Type="date" />
+          <Property Name="fecha_inicio" Type="date" />
+          <Property Name="fecha_entrega" Type="date" />
+          <Property Name="observacion" Type="varchar" MaxLength="200" />
+          <Property Name="estado" Type="int" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id_cliente" />
+          </Key>
+          <Property Name="id_cliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" />
+          <Property Name="apellido" Type="varchar" MaxLength="50" />
+          <Property Name="direccion" Type="varchar" MaxLength="80" />
+          <Property Name="telefono" Type="nchar" MaxLength="10" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="identificacion" Type="varchar" MaxLength="50" />
+          <Property Name="estado" Type="int" />
+        </EntityType>
+        <EntityType Name="detalle_prestamos">
+          <Key>
+            <PropertyRef Name="id_detalle_prestamos" />
+          </Key>
+          <Property Name="id_detalle_prestamos" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_libro" Type="int" />
+          <Property Name="id_cab_prestamos" Type="int" />
+          <Property Name="cantidad" Type="int" />
+          <Property Name="observacion" Type="varchar" MaxLength="50" />
+          <Property Name="estado" Type="int" />
+        </EntityType>
+        <EntityType Name="empleado">
+          <Key>
+            <PropertyRef Name="id_empleado" />
+          </Key>
+          <Property Name="id_empleado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" />
+          <Property Name="apellido" Type="varchar" MaxLength="50" />
+          <Property Name="cedula" Type="varchar" MaxLength="10" />
+          <Property Name="contraseña" Type="varchar" MaxLength="50" />
+          <Property Name="rol" Type="varchar" MaxLength="50" />
+          <Property Name="estado" Type="int" />
+        </EntityType>
+        <EntityType Name="libro">
+          <Key>
+            <PropertyRef Name="id_libro" />
+          </Key>
+          <Property Name="id_libro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_libros" Type="varchar" MaxLength="50" />
+          <Property Name="nombre_editorial" Type="varchar" MaxLength="50" />
+          <Property Name="codigo_editorial" Type="varchar" MaxLength="10" />
+          <Property Name="estado" Type="int" />
+        </EntityType>
+        <Association Name="FK_cabecera_prestamos_cliente">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="0..1" />
+          <End Role="cabecera_prestamos" Type="Self.cabecera_prestamos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="cabecera_prestamos">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cabecera_prestamos_empleado">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="0..1" />
+          <End Role="cabecera_prestamos" Type="Self.cabecera_prestamos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="cabecera_prestamos">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_detalle_prestamos_cabecera_prestamos">
+          <End Role="cabecera_prestamos" Type="Self.cabecera_prestamos" Multiplicity="0..1" />
+          <End Role="detalle_prestamos" Type="Self.detalle_prestamos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cabecera_prestamos">
+              <PropertyRef Name="id_CabPrestamos" />
+            </Principal>
+            <Dependent Role="detalle_prestamos">
+              <PropertyRef Name="id_cab_prestamos" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_detalle_prestamos_libro">
+          <End Role="libro" Type="Self.libro" Multiplicity="0..1" />
+          <End Role="detalle_prestamos" Type="Self.detalle_prestamos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="libro">
+              <PropertyRef Name="id_libro" />
+            </Principal>
+            <Dependent Role="detalle_prestamos">
+              <PropertyRef Name="id_libro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bibliotecaModelStoreContainer">
+          <EntitySet Name="cabecera_prestamos" EntityType="Self.cabecera_prestamos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cliente" EntityType="Self.cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="detalle_prestamos" EntityType="Self.detalle_prestamos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="empleado" EntityType="Self.empleado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="libro" EntityType="Self.libro" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_cabecera_prestamos_cliente" Association="Self.FK_cabecera_prestamos_cliente">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="cabecera_prestamos" EntitySet="cabecera_prestamos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cabecera_prestamos_empleado" Association="Self.FK_cabecera_prestamos_empleado">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="cabecera_prestamos" EntitySet="cabecera_prestamos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_detalle_prestamos_cabecera_prestamos" Association="Self.FK_detalle_prestamos_cabecera_prestamos">
+            <End Role="cabecera_prestamos" EntitySet="cabecera_prestamos" />
+            <End Role="detalle_prestamos" EntitySet="detalle_prestamos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_detalle_prestamos_libro" Association="Self.FK_detalle_prestamos_libro">
+            <End Role="libro" EntitySet="libro" />
+            <End Role="detalle_prestamos" EntitySet="detalle_prestamos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bibliotecaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="cabecera_prestamos">
+          <Key>
+            <PropertyRef Name="id_CabPrestamos" />
+          </Key>
+          <Property Name="id_CabPrestamos" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_empleado" Type="Int32" />
+          <Property Name="id_cliente" Type="Int32" />
+          <Property Name="fecha_prestamo" Type="DateTime" Precision="0" />
+          <Property Name="fecha_inicio" Type="DateTime" Precision="0" />
+          <Property Name="fecha_entrega" Type="DateTime" Precision="0" />
+          <Property Name="observacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="estado" Type="Int32" />
+          <NavigationProperty Name="cliente" Relationship="Self.FK_cabecera_prestamos_cliente" FromRole="cabecera_prestamos" ToRole="cliente" />
+          <NavigationProperty Name="empleado" Relationship="Self.FK_cabecera_prestamos_empleado" FromRole="cabecera_prestamos" ToRole="empleado" />
+          <NavigationProperty Name="detalle_prestamos" Relationship="Self.FK_detalle_prestamos_cabecera_prestamos" FromRole="cabecera_prestamos" ToRole="detalle_prestamos" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id_cliente" />
+          </Key>
+          <Property Name="id_cliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="direccion" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="telefono" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="identificacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="estado" Type="Int32" />
+          <NavigationProperty Name="cabecera_prestamos" Relationship="Self.FK_cabecera_prestamos_cliente" FromRole="cliente" ToRole="cabecera_prestamos" />
+        </EntityType>
+        <EntityType Name="detalle_prestamos">
+          <Key>
+            <PropertyRef Name="id_detalle_prestamos" />
+          </Key>
+          <Property Name="id_detalle_prestamos" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_libro" Type="Int32" />
+          <Property Name="id_cab_prestamos" Type="Int32" />
+          <Property Name="cantidad" Type="Int32" />
+          <Property Name="observacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="estado" Type="Int32" />
+          <NavigationProperty Name="cabecera_prestamos" Relationship="Self.FK_detalle_prestamos_cabecera_prestamos" FromRole="detalle_prestamos" ToRole="cabecera_prestamos" />
+          <NavigationProperty Name="libro" Relationship="Self.FK_detalle_prestamos_libro" FromRole="detalle_prestamos" ToRole="libro" />
+        </EntityType>
+        <EntityType Name="empleado">
+          <Key>
+            <PropertyRef Name="id_empleado" />
+          </Key>
+          <Property Name="id_empleado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="cedula" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="contraseña" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="estado" Type="Int32" />
+          <NavigationProperty Name="cabecera_prestamos" Relationship="Self.FK_cabecera_prestamos_empleado" FromRole="empleado" ToRole="cabecera_prestamos" />
+        </EntityType>
+        <EntityType Name="libro">
+          <Key>
+            <PropertyRef Name="id_libro" />
+          </Key>
+          <Property Name="id_libro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_libros" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nombre_editorial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="codigo_editorial" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="estado" Type="Int32" />
+          <NavigationProperty Name="detalle_prestamos" Relationship="Self.FK_detalle_prestamos_libro" FromRole="libro" ToRole="detalle_prestamos" />
+        </EntityType>
+        <Association Name="FK_cabecera_prestamos_cliente">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="0..1" />
+          <End Role="cabecera_prestamos" Type="Self.cabecera_prestamos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="cabecera_prestamos">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cabecera_prestamos_empleado">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="0..1" />
+          <End Role="cabecera_prestamos" Type="Self.cabecera_prestamos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="cabecera_prestamos">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_detalle_prestamos_cabecera_prestamos">
+          <End Role="cabecera_prestamos" Type="Self.cabecera_prestamos" Multiplicity="0..1" />
+          <End Role="detalle_prestamos" Type="Self.detalle_prestamos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cabecera_prestamos">
+              <PropertyRef Name="id_CabPrestamos" />
+            </Principal>
+            <Dependent Role="detalle_prestamos">
+              <PropertyRef Name="id_cab_prestamos" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_detalle_prestamos_libro">
+          <End Role="libro" Type="Self.libro" Multiplicity="0..1" />
+          <End Role="detalle_prestamos" Type="Self.detalle_prestamos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="libro">
+              <PropertyRef Name="id_libro" />
+            </Principal>
+            <Dependent Role="detalle_prestamos">
+              <PropertyRef Name="id_libro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bibliotecaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cabecera_prestamos" EntityType="Self.cabecera_prestamos" />
+          <EntitySet Name="cliente" EntityType="Self.cliente" />
+          <EntitySet Name="detalle_prestamos" EntityType="Self.detalle_prestamos" />
+          <EntitySet Name="empleado" EntityType="Self.empleado" />
+          <EntitySet Name="libro" EntityType="Self.libro" />
+          <AssociationSet Name="FK_cabecera_prestamos_cliente" Association="Self.FK_cabecera_prestamos_cliente">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="cabecera_prestamos" EntitySet="cabecera_prestamos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cabecera_prestamos_empleado" Association="Self.FK_cabecera_prestamos_empleado">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="cabecera_prestamos" EntitySet="cabecera_prestamos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_detalle_prestamos_cabecera_prestamos" Association="Self.FK_detalle_prestamos_cabecera_prestamos">
+            <End Role="cabecera_prestamos" EntitySet="cabecera_prestamos" />
+            <End Role="detalle_prestamos" EntitySet="detalle_prestamos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_detalle_prestamos_libro" Association="Self.FK_detalle_prestamos_libro">
+            <End Role="libro" EntitySet="libro" />
+            <End Role="detalle_prestamos" EntitySet="detalle_prestamos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bibliotecaModelStoreContainer" CdmEntityContainer="bibliotecaEntities">
+          <EntitySetMapping Name="cabecera_prestamos">
+            <EntityTypeMapping TypeName="bibliotecaModel.cabecera_prestamos">
+              <MappingFragment StoreEntitySet="cabecera_prestamos">
+                <ScalarProperty Name="id_CabPrestamos" ColumnName="id_CabPrestamos" />
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="fecha_prestamo" ColumnName="fecha_prestamo" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_entrega" ColumnName="fecha_entrega" />
+                <ScalarProperty Name="observacion" ColumnName="observacion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cliente">
+            <EntityTypeMapping TypeName="bibliotecaModel.cliente">
+              <MappingFragment StoreEntitySet="cliente">
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="identificacion" ColumnName="identificacion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="detalle_prestamos">
+            <EntityTypeMapping TypeName="bibliotecaModel.detalle_prestamos">
+              <MappingFragment StoreEntitySet="detalle_prestamos">
+                <ScalarProperty Name="id_detalle_prestamos" ColumnName="id_detalle_prestamos" />
+                <ScalarProperty Name="id_libro" ColumnName="id_libro" />
+                <ScalarProperty Name="id_cab_prestamos" ColumnName="id_cab_prestamos" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="observacion" ColumnName="observacion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empleado">
+            <EntityTypeMapping TypeName="bibliotecaModel.empleado">
+              <MappingFragment StoreEntitySet="empleado">
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="cedula" ColumnName="cedula" />
+                <ScalarProperty Name="contraseña" ColumnName="contraseña" />
+                <ScalarProperty Name="rol" ColumnName="rol" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="libro">
+            <EntityTypeMapping TypeName="bibliotecaModel.libro">
+              <MappingFragment StoreEntitySet="libro">
+                <ScalarProperty Name="id_libro" ColumnName="id_libro" />
+                <ScalarProperty Name="nombre_libros" ColumnName="nombre_libros" />
+                <ScalarProperty Name="nombre_editorial" ColumnName="nombre_editorial" />
+                <ScalarProperty Name="codigo_editorial" ColumnName="codigo_editorial" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
